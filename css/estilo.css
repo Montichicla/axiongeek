@@ -1,0 +1,67 @@
+header {
+    background-color: #f0f0f0;
+    padding: 20px;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #706e6e; /* gris */
+  }
+  
+  h2 {
+    color: #800080; /* morado */
+    text-align: center;
+    padding: 20px 0;
+  }
+  
+  .productos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .producto {
+    width: 200px;
+    margin: 10px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .producto img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .producto h3 {
+    color: #800080; /* morado */
+    margin: 0;
+  }
+  
+  .producto p {
+    color: #808080; /* gris */
+  }
+  
+  .producto a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #FFFF00; /* amarillo */
+    color: #000000;
+    text-decoration: none;
+  }
+  
+  .producto a:hover {
+    background-color: #800080; /* morado */
+    color: #ffffff;
+  }
+
+  .producto-img {
+    width: 80%;
+    height: 80px; /* Ajusta este valor a la altura que desees */
+    object-fit: cover; /* Esto hará que la imagen se recorte en lugar de estirarse */
+}

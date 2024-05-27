@@ -64,18 +64,18 @@ foreach ($carrito as $id => $cantidad) {
                 <?php $total = 0; ?>
                 <?php foreach ($productos as $producto): ?>
                     <tr>
-                        <td><?php echo $producto['nombre']; ?></td>
-                        <td><?php echo number_format($producto['precio'], 2); ?>€</td>
+                        <td><?php echo $producto['nombrep']; ?></td>
+                        <td>$<?php echo number_format($producto['precio'], 2); ?></td>
                         <td>
-                            <form action="actualizar_carrito.php" method="post">
+                            <form action="actualizar_carr.php" method="post">
                                 <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
                                 <input type="number" name="cantidad" value="<?php echo $producto['cantidad']; ?>" min="1">
                                 <button type="submit">Actualizar</button>
                             </form>
                         </td>
-                        <td><?php echo number_format($producto['precio'] * $producto['cantidad'], 2); ?>€</td>
+                        <td>$<?php echo   number_format($producto['precio'] * $producto['cantidad'], 2); ?> MXN</td>
                         <td>
-                            <form action="eliminar_carrito.php" method="post">
+                            <form action="eliminar_carr.php" method="post">
                                 <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
                                 <button type="submit">Eliminar</button>
                             </form>

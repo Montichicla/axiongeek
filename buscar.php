@@ -1,12 +1,19 @@
 <?php
-//Conectamos la BD
+// Conectamos la BD
 $conn = new mysqli('localhost', 'root', '', 'geekshop');
 if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
-// Obtener los últimos 5 productos
-$sql = "SELECT * FROM productos ORDER BY id DESC LIMIT 5";
+// Obtener la consulta de búsqueda
+$q = isset($_GET['q']) ? $_GET['q'] : '';
+
+// Preparar la consulta SQL
+$sql = $q
+    ? "SELECT * FROM productos WHERE nombrep LIKE '%$q%'"
+    : "SELECT * FROM productos";
+
+// Ejecutar la consulta
 $result = $conn->query($sql);
 ?>
 
@@ -21,22 +28,21 @@ $result = $conn->query($sql);
 <body>
     <?php include 'includes/header.php'; ?>
 
-    <h2>Lo más nuevo</h2>
-
     <div class="productos">
         <?php
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 echo "<div class='producto'>";
-                echo "<img class='producto-img' src='" . $row['imagen'] . "' alt='" . $row['nombrep'] . "'>";                
+                echo "<img src='" . $row['imagen'] . "' alt='" . $row['nombrep'] . "'>";                
                 echo "<h3>" . $row['nombrep'] . "</h3>";
+                echo "<p>Categoría: " . $row['categoria'] . "</p>"; // Línea agregada
                 echo "<p>" . $row['descripcion'] . "</p>";
                 echo "<p>$" . $row['precio'] . "</p>";
                 echo "<a href='producto.php?id=" . $row['id'] . "'>Ver Producto</a>";
                 echo "</div>";
             }
         } else {
-            echo "No hay productos disponibles.";
+            echo "<h2>Lo sentimos no hay coincidencias con la búsqueda</h2>";
         }
         ?>
     </div>

@@ -24,8 +24,8 @@ $producto = $result->fetch_assoc();
     <?php include 'includes/header.php'; ?>
 
     <div class="producto-detalle">
-        <img src="img/<?php echo $producto['imagen']; ?>" alt="<?php echo $producto['nombre']; ?>">
-        <h2><?php echo $producto['nombre']; ?></h2>
+    <img src= <?php echo $producto['imagen']; ?>>
+        <h2><?php echo $producto['nombrep']; ?></h2>
         <p><?php echo $producto['descripcion']; ?></p>
         <p>$<?php echo $producto['precio']; ?></p>
         <form action="carrito.php" method="post">

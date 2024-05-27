@@ -27,15 +27,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre = $_POST['nombre'];
     $direccion = $_POST['direccion'];
     $telefono = $_POST['telefono'];
-    
-    // Insertar usuario
-    $sql_usuario = "INSERT INTO usuarios (nombre, direccion, telefono) VALUES ('$nombre', '$direccion', '$telefono')";
-    if ($conn->query($sql_usuario) === TRUE) {
-        $usuario_id = $conn->insert_id;
-    } else {
-        die("Error al insertar usuario: " . $conn->error);
+
+    // Verificar que los campos no estén vacíos
+    if(empty($nombre) || empty($direccion) || empty($telefono)) {
+        die("Todos los campos son obligatorios");
     }
-    
+
+    // Verificar que el nombre solo contenga letras
+    if(!preg_match("/^[a-zA-Z ]*$/",$nombre)) {
+        die("Solo se permiten letras y espacios en blanco en el nombre");
+    }
+
+    // Verificar que el teléfono solo contenga números
+    if(!preg_match("/^[0-9]*$/",$telefono)) {
+        die("Solo se permiten números en el teléfono");
+    }
+
     // Calcular el total
     $total = 0;
     foreach ($productos as $producto) {
@@ -44,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Insertar pedido
     $fecha = date('Y-m-d H:i:s');
-    $sql_pedido = "INSERT INTO pedidos (usuario_id, total, fecha) VALUES ('$usuario_id', '$total', '$fecha')";
+    $sql_pedido = "INSERT INTO pedidos (nombre, direccion, telefono, total, fecha) VALUES ('$nombre', '$direccion', '$telefono', '$total', '$fecha')";
     if ($conn->query($sql_pedido) === TRUE) {
         $pedido_id = $conn->insert_id;
     } else {
@@ -56,17 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $producto_id = $producto['id'];
         $cantidad = $producto['cantidad'];
         $precio = $producto['precio'];
-        $sql_detalle = "INSERT INTO detalles_pedido (pedido_id, producto_id, cantidad, precio) VALUES ('$pedido_id', '$producto_id', '$cantidad', '$precio')";
+        $sql_detalle = "INSERT INTO detalles_pedido (producto_id, cantidad, precio) VALUES ( '$producto_id', '$cantidad', '$precio')";
         if ($conn->query($sql_detalle) !== TRUE) {
             die("Error al insertar detalle del pedido: " . $conn->error);
         }
     }
 
-    // Limpiar el carrito
-    $_SESSION['carrito'] = array();
-
-    // Redirigir a la página de confirmación
-    header('Location: confirmacion.php');
+    // Redirigir a la página de detalles de la compra
+    header('Location: detalles_compra.php');
     exit();
 }
 ?>
@@ -82,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <?php include 'includes/header.php'; ?>
 
-    <h1>Checkout</h1>
+    <h1>Confirma tu compra</h1>
 
     <form action="checkout.php" method="post">
         <h2>Detalles de Facturación</h2>
@@ -99,11 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <ul>
             <?php $total = 0; ?>
             <?php foreach ($productos as $producto): ?>
-                <li><?php echo $producto['nombre']; ?> (<?php echo $producto['cantidad']; ?>) - <?php echo number_format($producto['precio'] * $producto['cantidad'], 2); ?>€</li>
+                <li><?php echo $producto['nombrep']; ?> (<?php echo $producto['cantidad']; ?>) - <?php echo number_format($producto['precio'] * $producto['cantidad'], 2); ?>€</li>
                 <?php $total += $producto['precio'] * $producto['cantidad']; ?>
             <?php endforeach; ?>
         </ul>
-        <p><strong>Total: <?php echo number_format($total, 2); ?>€</strong></p>
+        <p><strong>Total: $<?php echo number_format($total, 2); ?> MXN</strong></p>
         
         <button type="submit">Realizar Pedido</button>
     </form>
